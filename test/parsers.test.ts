@@ -74,4 +74,43 @@ describe("source parsers", () => {
       "22",
     ]);
   });
+
+  it("resolves setup-node versions from matrix.include objects", () => {
+    const text = `jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - node: 20
+            os: ubuntu-latest
+          - node: "22"
+            os: windows-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: \${{ matrix.node }}
+`;
+    const result = parseGitHubActions(text, "ci.yml");
+    expect(result.diagnostics).toEqual([]);
+    expect(result.evidence.map((item) => item.constraint)).toEqual(["20", "22"]);
+    expect(result.evidence.map((item) => item.location.line)).toEqual([6, 8]);
+  });
+
+  it("does not treat unrelated matrix.include fields as Node versions", () => {
+    const text = `jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - node: 20
+            os: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: \${{ matrix.os }}
+`;
+    const result = parseGitHubActions(text, "ci.yml");
+    expect(result.evidence).toEqual([]);
+    expect(result.diagnostics[0]?.code).toBe("unresolved-actions-matrix");
+  });
 });
