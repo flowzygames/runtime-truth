@@ -87,6 +87,58 @@ function parseMatrices(lines: string[], file: string): Map<string, MatrixValue[]
     if (values.length > 0) matrices.set(key, values);
   }
 
+  // GitHub Actions also permits matrix values as objects under `include`.
+  // Only collect the `node` field used by setup-node; other fields such as
+  // `os` must not become runtime evidence by accident.
+  for (const [index, line] of lines.entries()) {
+    const include = line.match(/^(\s*)include\s*:\s*$/);
+    if (!include) continue;
+    const includeIndent = include[1].length;
+    let belongsToMatrix = false;
+    for (let parent = index - 1; parent >= 0; parent -= 1) {
+      const candidate = lines[parent];
+      if (!candidate.trim() || candidate.trimStart().startsWith("#")) continue;
+      const parentIndent = leadingWhitespace(candidate);
+      if (parentIndent === includeIndent) continue;
+      if (parentIndent < includeIndent) {
+        belongsToMatrix = /^\s*matrix\s*:\s*$/.test(candidate);
+        break;
+      }
+    }
+    if (!belongsToMatrix) continue;
+
+    const values: MatrixValue[] = [];
+    let entryIndent: number | null = null;
+    for (let cursor = index + 1; cursor < lines.length; cursor += 1) {
+      const candidate = lines[cursor];
+      if (!candidate.trim() || candidate.trimStart().startsWith("#")) continue;
+      const indent = leadingWhitespace(candidate);
+      if (indent <= includeIndent) break;
+      const entry = candidate.match(/^(\s*)-\s*(.*?)\s*$/);
+      if (entry) {
+        entryIndent = entry[1].length;
+        const field = entry[2].match(/^([A-Za-z0-9_-]+)\s*:\s*(.*?)\s*$/);
+        if (field?.[1] === "node" && field[2]) {
+          const raw = cleanYamlScalar(field[2]);
+          if (raw) {
+            const column = candidate.indexOf(field[2], candidate.indexOf(":") + 1) + 1;
+            values.push({ value: raw, location: lineLocation(file, cursor + 1, column), key: "node" });
+          }
+        }
+        continue;
+      }
+      if (entryIndent === null || indent <= entryIndent) break;
+      const field = candidate.match(/^\s*([A-Za-z0-9_-]+)\s*:\s*(.*?)\s*$/);
+      if (field?.[1] !== "node" || !field[2]) continue;
+      const raw = cleanYamlScalar(field[2]);
+      if (raw) {
+        const column = candidate.indexOf(field[2], candidate.indexOf(":") + 1) + 1;
+        values.push({ value: raw, location: lineLocation(file, cursor + 1, column), key: "node" });
+      }
+    }
+    if (values.length > 0) matrices.set("node", [...(matrices.get("node") ?? []), ...values]);
+  }
+
   // Also understand compact `matrix: { node: [18, 20] }` forms.
   for (const [index, line] of lines.entries()) {
     const object = line.match(/\bmatrix\s*:\s*\{\s*([A-Za-z0-9_-]+)\s*:\s*(\[[^\]]*\])/);
