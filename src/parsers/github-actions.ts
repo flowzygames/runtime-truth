@@ -99,8 +99,9 @@ function parseMatrices(lines: string[], file: string): Map<string, MatrixValue[]
       const candidate = lines[parent];
       if (!candidate.trim() || candidate.trimStart().startsWith("#")) continue;
       const parentIndent = leadingWhitespace(candidate);
-      if (parentIndent <= includeIndent) {
-        belongsToMatrix = parentIndent < includeIndent && /^\s*matrix\s*:\s*$/.test(candidate);
+      if (parentIndent === includeIndent) continue;
+      if (parentIndent < includeIndent) {
+        belongsToMatrix = /^\s*matrix\s*:\s*$/.test(candidate);
         break;
       }
     }
@@ -135,7 +136,7 @@ function parseMatrices(lines: string[], file: string): Map<string, MatrixValue[]
         values.push({ value: raw, location: lineLocation(file, cursor + 1, column), key: "node" });
       }
     }
-    if (values.length > 0) matrices.set("node", values);
+    if (values.length > 0) matrices.set("node", [...(matrices.get("node") ?? []), ...values]);
   }
 
   // Also understand compact `matrix: { node: [18, 20] }` forms.
