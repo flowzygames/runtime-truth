@@ -1,0 +1,15 @@
+{
+  "name": "aligned-example",
+  "engines": {
+    "node": ">=20 <23"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^20.11.0"
+    }
+  },
+  "volta": {
+    "node": "20.11.1"
+  }
+}

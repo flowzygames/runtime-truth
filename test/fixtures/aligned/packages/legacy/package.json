@@ -1,0 +1,4 @@
+{
+  "name": "intentionally-ignored-nested-package",
+  "engines": { "node": "10" }
+}

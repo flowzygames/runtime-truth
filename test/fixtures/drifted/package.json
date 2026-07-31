@@ -1,0 +1,6 @@
+{
+  "name": "drifted-example",
+  "engines": {
+    "node": ">=20"
+  }
+}

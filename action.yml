@@ -1,0 +1,27 @@
+name: RuntimeTruth
+description: Find incompatible Node.js versions across package.json, local version files, Docker, and GitHub Actions.
+author: RuntimeTruth contributors
+branding:
+  icon: activity
+  color: purple
+inputs:
+  path:
+    description: Repository path to inspect.
+    required: false
+    default: .
+  fail-on:
+    description: Lowest severity that fails the check (error, warning, or never).
+    required: false
+    default: error
+outputs:
+  status:
+    description: Overall result (aligned, warning, incompatible, or empty).
+  sources:
+    description: Number of runtime declarations inspected.
+  errors:
+    description: Number of runtime compatibility errors found.
+  warnings:
+    description: Number of runtime compatibility warnings found.
+runs:
+  using: node20
+  main: dist/action.js

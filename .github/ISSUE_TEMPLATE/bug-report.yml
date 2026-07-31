@@ -1,0 +1,68 @@
+name: Bug report
+description: Report an incorrect result, crash, or confusing diagnostic.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking time to improve RuntimeTruth. Please remove secrets, private registry names, and unrelated application code from every example.
+  - type: input
+    id: version
+    attributes:
+      label: RuntimeTruth version
+      description: Run `npx runtime-truth --version` or copy the version from your lockfile.
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Include your OS, architecture, Node.js version, and package manager.
+      placeholder: macOS 15 arm64; Node 22.14.0; npm 11
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Minimal repository files
+      description: Paste the smallest sanitized package.json, version file, Dockerfile, or workflow that reproduces the issue.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual output
+      description: Paste the full RuntimeTruth command and output.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should RuntimeTruth have concluded, and why?
+    validations:
+      required: true
+  - type: dropdown
+    id: regression
+    attributes:
+      label: Regression?
+      options:
+        - I do not know
+        - No, this never worked
+        - Yes, this worked in an earlier version
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed secrets and private organization details from the example.
+          required: true
+        - label: This is not a security vulnerability (those should be reported privately through GitHub Security Advisories).
+          required: true

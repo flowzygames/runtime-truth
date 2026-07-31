@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">RuntimeTruth logo</title>
+  <desc id="desc">A luminous check mark crossing aligned runtime layers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="14" x2="142" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#172235"/>
+      <stop offset="1" stop-color="#080c14"/>
+    </linearGradient>
+    <linearGradient id="line" x1="39" y1="46" x2="123" y2="119" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5CE1E6"/>
+      <stop offset="1" stop-color="#63D391"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="144" height="144" rx="36" fill="url(#bg)" stroke="#2A3A50" stroke-width="2"/>
+  <g fill="none" stroke="#60738D" stroke-width="7" stroke-linecap="round">
+    <path d="M38 47h84"/>
+    <path d="M38 76h84" opacity=".78"/>
+    <path d="M38 105h84" opacity=".56"/>
+  </g>
+  <path d="m47 91 20 20 47-57" fill="none" stroke="url(#line)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+</svg>

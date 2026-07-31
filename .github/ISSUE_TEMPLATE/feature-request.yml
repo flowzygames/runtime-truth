@@ -1,0 +1,41 @@
+name: Feature request
+description: Propose an improvement to RuntimeTruth's workflow or diagnostics.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What real runtime-drift problem is hard or impossible to solve today?
+      placeholder: When our team..., RuntimeTruth currently...
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the result you need without prescribing an implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Minimal example
+      description: If relevant, provide sanitized input and the output you would expect.
+      render: text
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: How do you handle this today?
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Project fit
+      options:
+        - label: This request concerns runtime compatibility rather than general-purpose linting.
+          required: true
+        - label: I searched existing issues and the roadmap for a similar request.
+          required: true

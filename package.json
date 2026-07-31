@@ -1,0 +1,77 @@
+{
+  "name": "runtime-truth",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Find incompatible Node.js versions across local development, CI, and production before they become bugs.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "runtime-truth": "dist/cli.js",
+    "runtimetruth": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "action.yml",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli.ts",
+    "check": "npm run typecheck && npm test && npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=20",
+      "onFail": "warn"
+    }
+  },
+  "volta": {
+    "node": "22.17.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flowzygames/runtime-truth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flowzygames/runtime-truth/issues"
+  },
+  "homepage": "https://github.com/flowzygames/runtime-truth#readme",
+  "keywords": [
+    "nodejs",
+    "runtime",
+    "version",
+    "drift",
+    "docker",
+    "github-actions",
+    "ci",
+    "devtools",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "RuntimeTruth contributors",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "overrides": {
+    "esbuild": "0.28.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@vitest/coverage-v8": "^4.1.10",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10"
+  }
+}
